@@ -9,6 +9,8 @@ import { PortafolioComponent } from './pages/portafolio/portafolio.component';
 import { AboutComponent } from './pages/about/about.component';
 import { ItemComponent } from './pages/item/item.component';
 import { RouterModule } from '@angular/router';
+//IMPORTAR ESTO PARA PETICIONES HTTP
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     BrowserModule,
     AppRoutingModule,
+    //PARA REALIZAR PETICIONES HTTP
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
