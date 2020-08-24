@@ -7,10 +7,15 @@ import { InfoPagina } from '../interfaces/info-pagina-interface';
 })
 export class InfoPaginaService {
   info: InfoPagina = {};
+  equipo: any[] = [];
   cargada = false;
 
   constructor(private http: HttpClient) {
     console.log('info pagina cargada');
+    this.cargarInfo();
+    this.cargarEquicpo();
+  }
+  private cargarInfo() {
     //LEER ARCHIVO JSON
     this.http
       .get('assets/data/data-pagina.json')
@@ -20,6 +25,15 @@ export class InfoPaginaService {
         console.log(resp);
         //SI QUEREMOS UN ELEMENTO EN ESPECIFICO HACEMOS LO SIGUIETN
         console.log(resp.twitter);
+      });
+  }
+  private cargarEquicpo() {
+    ///facer una peticio a firebase
+    this.http
+      .get('https://flutter-varios-11491.firebaseio.com/equipo.json')
+      .subscribe((resp: any[]) => {
+        this.equipo = resp;
+        console.log(resp);
       });
   }
 }
