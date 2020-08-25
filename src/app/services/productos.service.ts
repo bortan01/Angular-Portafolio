@@ -17,7 +17,9 @@ export class ProductosService {
       .get('https://flutter-varios-11491.firebaseio.com/producto_idx.json')
       .subscribe((resp: ProductoInterfase[]) => {
         this.ListaProductos = resp;
-        this.cargando = false;
+        setTimeout(() => {
+          this.cargando = false;
+        }, 200);
       });
   }
 }
