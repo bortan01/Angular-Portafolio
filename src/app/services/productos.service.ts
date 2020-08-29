@@ -7,8 +7,8 @@ import { ProductoInterfase } from '../interfaces/producto-interfase';
 })
 export class ProductosService {
   cargando = true;
-  ListaProductos: ProductoInterfase[];
-  productoFiltrad: ProductoInterfase[];
+  ListaProductos: ProductoInterfase[] = [];
+  productoFiltrad: ProductoInterfase[] = [];
   constructor(private http: HttpClient) {
     this.cargarProductos();
   }
@@ -19,10 +19,8 @@ export class ProductosService {
         .get('https://flutter-varios-11491.firebaseio.com/producto_idx.json')
         .subscribe((resp: ProductoInterfase[]) => {
           this.ListaProductos = resp;
-          setTimeout(() => {
-            this.cargando = false;
-            resolve();
-          }, 200);
+          this.cargando = false;
+          resolve();
         });
     });
   }
@@ -34,7 +32,7 @@ export class ProductosService {
   }
 
   buscarPrducto(termino: string) {
-    if (this.ListaProductos.length === 0) {
+    if (this.ListaProductos) {
       //cargar productos
       this.cargarProductos().then(() => {
         ///despues de tener los productos, aplicar filtro
@@ -49,8 +47,8 @@ export class ProductosService {
     });
   }
   private filtrarProductos(termino: string) {
-    console.log(this.ListaProductos);
-    this.productoFiltrad.forEach((prod) => {
+    this.productoFiltrad = [];
+    this.ListaProductos.forEach((prod) => {
       if (prod.categoria.indexOf(termino) >= 0) {
         this.productoFiltrad.push(prod);
       }
