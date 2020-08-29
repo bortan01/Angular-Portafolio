@@ -8,18 +8,52 @@ import { ProductoInterfase } from '../interfaces/producto-interfase';
 export class ProductosService {
   cargando = true;
   ListaProductos: ProductoInterfase[];
+  productoFiltrad: ProductoInterfase[];
   constructor(private http: HttpClient) {
     this.cargarProductos();
   }
 
   private cargarProductos() {
-    this.http
-      .get('https://flutter-varios-11491.firebaseio.com/producto_idx.json')
-      .subscribe((resp: ProductoInterfase[]) => {
-        this.ListaProductos = resp;
-        setTimeout(() => {
-          this.cargando = false;
-        }, 200);
+    return new Promise((resolve, reject) => {
+      this.http
+        .get('https://flutter-varios-11491.firebaseio.com/producto_idx.json')
+        .subscribe((resp: ProductoInterfase[]) => {
+          this.ListaProductos = resp;
+          setTimeout(() => {
+            this.cargando = false;
+            resolve();
+          }, 200);
+        });
+    });
+  }
+
+  getProducto(id: String) {
+    return this.http.get(
+      `https://flutter-varios-11491.firebaseio.com/productoX/${id}.json`
+    );
+  }
+
+  buscarPrducto(termino: string) {
+    if (this.ListaProductos.length === 0) {
+      //cargar productos
+      this.cargarProductos().then(() => {
+        ///despues de tener los productos, aplicar filtro
+        this.filtrarProductos(termino);
       });
+    } else {
+      ///cargar el filtro
+      this.filtrarProductos(termino);
+    }
+    this.productoFiltrad = this.ListaProductos.filter((producto) => {
+      return true;
+    });
+  }
+  private filtrarProductos(termino: string) {
+    console.log(this.ListaProductos);
+    this.productoFiltrad.forEach((prod) => {
+      if (prod.categoria.indexOf(termino) >= 0) {
+        this.productoFiltrad.push(prod);
+      }
+    });
   }
 }
